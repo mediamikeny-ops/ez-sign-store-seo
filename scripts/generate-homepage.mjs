@@ -1,0 +1,718 @@
+import { writeFileSync } from "node:fs";
+
+const categoryImages = {
+  vinylBanners: "/assets/categories/vinyl-banners.png",
+  tabletopBanners: "/assets/categories/tabletop-banners.png",
+  jobSiteSigns: "/assets/categories/job-site-signs.png",
+  postcards: "/assets/categories/postcards.png",
+  doorHangers: "/assets/categories/door-hangers.png",
+  rollupDisplays: "/assets/categories/rollup-displays.png",
+  yardSigns: "/assets/categories/yard-signs.png",
+  vehicleMagnets: "/assets/categories/vehicle-magnets.png"
+};
+
+const heroImages = [
+  ["Vinyl banners", categoryImages.vinylBanners],
+  ["Yard signs", categoryImages.yardSigns],
+  ["Job site signs", categoryImages.jobSiteSigns],
+  ["Vehicle magnets", categoryImages.vehicleMagnets],
+  ["Door hangers", categoryImages.doorHangers],
+  ["Roll-up displays", categoryImages.rollupDisplays]
+];
+
+const products = [
+  ["Vinyl Banners", "vinyl-banners", "Custom indoor and outdoor banners with grommets, pole pockets, heavy-duty options, and fast quote paths.", categoryImages.vinylBanners],
+  ["Yard Signs", "yard-signs", "Corrugated plastic signs, wire stakes, political signs, graduation signs, event signs, and contractor lawn signs.", categoryImages.yardSigns],
+  ["Job Site Signs", "job-site-signs", "Construction boards, safety signs, project signs, parking signs, directional signs, and weather-ready site graphics.", categoryImages.jobSiteSigns],
+  ["Table Top Banners", "tabletop-banners", "Compact displays for counters, registration tables, retail promos, open houses, and trade show booths.", categoryImages.tabletopBanners],
+  ["Postcards", "postcards", "Direct mail postcards, glossy cards, local marketing handouts, listing cards, and business promotion prints.", categoryImages.postcards],
+  ["Door Hangers", "door-hangers", "Neighborhood marketing for contractors, restaurants, realtors, lawn care, home services, and local campaigns.", categoryImages.doorHangers],
+  ["Vehicle Magnets", "vehicle-magnets", "Removable car and truck door magnets for service businesses, deliveries, real estate, and contractor fleets.", categoryImages.vehicleMagnets],
+  ["Roll-Up Displays", "roll-up-displays", "Retractable banners, portable banner stands, event displays, lobby graphics, and sales presentation signage.", categoryImages.rollupDisplays]
+];
+
+const categoryCloud = [
+  ["Political Yard Signs", "yard-signs"],
+  ["Coroplast Signs", "coroplast-signs"],
+  ["Real Estate Wire Frames", "real-estate-signs"],
+  ["Car Door Magnets", "vehicle-magnets"],
+  ["Business Cards", "business-cards"],
+  ["Brochures", "brochures"],
+  ["Posters", "posters"],
+  ["Table Covers", "table-covers"],
+  ["Feather Flags", "feather-flags"],
+  ["A-Frame Signs", "a-frame-signs"],
+  ["Parking Signs", "parking-signs"],
+  ["OSHA Safety Signs", "safety-signs"],
+  ["Graduation Signs", "graduation-signs"],
+  ["Vector Tracing", "vector-tracing"]
+];
+
+const html = `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EZ Sign Store | National Sign & Print Buying Resource</title>
+  <meta name="description" content="EZ Sign Store is a clean national sign and print buying resource for banners, yard signs, decals, job site signs, postcards, door hangers, vehicle magnets, and custom printed products.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%23f7fbff'/%3E%3Crect x='8' y='8' width='48' height='48' rx='13' fill='%230b5ed7'/%3E%3Cpath d='M19 22h25v6H19zm0 12h18v6H19z' fill='white'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --black: #05070b;
+      --navy: #071426;
+      --blue: #0b5ed7;
+      --sky: #13a7ff;
+      --silver: #d8e1ec;
+      --ice: #f5f9fe;
+      --line: rgba(7,20,38,.13);
+      --shadow: 0 24px 60px rgba(7,20,38,.14);
+      --glow: 0 18px 48px rgba(11,94,215,.22);
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      color: var(--black);
+      background:
+        radial-gradient(circle at 18% 0%, rgba(19,167,255,.18), transparent 30rem),
+        radial-gradient(circle at 92% 14%, rgba(216,225,236,.9), transparent 26rem),
+        linear-gradient(180deg, #ffffff 0%, #f3f7fc 56%, #ffffff 100%);
+      line-height: 1.5;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    .wrap { width: min(1220px, calc(100% - 32px)); margin: 0 auto; }
+    h1, h2, h3 { margin: 0; line-height: 1.04; letter-spacing: -.035em; }
+    p { margin: 0; color: #526071; }
+
+    .mobile-actions {
+      display: none;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      padding: 10px 16px;
+      background: linear-gradient(90deg, #05070b, #071426);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .mobile-actions a {
+      min-height: 44px;
+      border-radius: 9px;
+      color: #fff;
+      font-size: .72rem;
+      font-weight: 950;
+      text-transform: uppercase;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.26);
+      background: linear-gradient(135deg, #13a7ff 0%, #0b5ed7 48%, #071426 100%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 10px 24px rgba(11,94,215,.26);
+    }
+
+    .top-strip {
+      background: linear-gradient(90deg, #05070b, #071426 52%, #0b5ed7);
+      color: #fff;
+      font-size: .83rem;
+      font-weight: 800;
+      border-bottom: 1px solid rgba(255,255,255,.18);
+    }
+
+    .top-strip .wrap {
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(255,255,255,.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(7,20,38,.11);
+      box-shadow: 0 18px 42px rgba(7,20,38,.09);
+    }
+
+    .nav .wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      padding: 13px 0;
+      position: relative;
+    }
+
+    .brand { display: flex; align-items: center; gap: 12px; min-width: 250px; }
+    .mark {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      color: #fff;
+      font-weight: 950;
+      font-size: 1.35rem;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.5), transparent 24%),
+        linear-gradient(145deg, #06101f 0%, #0b5ed7 54%, #13a7ff 100%);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.4), var(--glow);
+    }
+
+    .brand strong {
+      display: block;
+      font-size: 1.3rem;
+      font-weight: 950;
+      text-transform: uppercase;
+    }
+
+    .brand span {
+      display: block;
+      margin-top: 3px;
+      color: #637184;
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .menu { display: flex; justify-content: flex-end; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .menu a {
+      padding: 10px 12px;
+      border-radius: 9px;
+      border: 1px solid rgba(7,20,38,.12);
+      background: linear-gradient(180deg, #ffffff, #eef3f8);
+      color: #142235;
+      font-size: .84rem;
+      font-weight: 950;
+      text-transform: uppercase;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.9);
+    }
+
+    .menu a:hover { color: #fff; background: linear-gradient(135deg, #13a7ff, #0b5ed7 55%, #071426); }
+    .hamburger {
+      display: none;
+      width: 48px;
+      height: 44px;
+      border: 1px solid rgba(7,20,38,.22);
+      border-radius: 10px;
+      background: linear-gradient(180deg, #fff, #dce5ef);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 5px;
+      box-shadow: 0 10px 22px rgba(7,20,38,.12);
+    }
+
+    .hamburger span { width: 25px; height: 3px; border-radius: 4px; background: var(--black); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 70% 18%, rgba(19,167,255,.22), transparent 28rem),
+        linear-gradient(135deg, #ffffff 0%, #f8fbff 43%, #dbe5f0 100%);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(105deg, transparent 0 48%, rgba(11,94,215,.08) 48% 54%, transparent 54%),
+        linear-gradient(145deg, transparent 0 64%, rgba(255,255,255,.85) 64% 72%, transparent 72%);
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr .9fr;
+      gap: 44px;
+      align-items: center;
+      padding: 76px 0 82px;
+    }
+
+    .eyebrow {
+      color: var(--blue);
+      margin-bottom: 14px;
+      font-size: .82rem;
+      font-weight: 950;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: clamp(3rem, 6vw, 6.55rem);
+      max-width: 920px;
+      color: #071426;
+      text-transform: uppercase;
+    }
+
+    .chrome-text {
+      background: linear-gradient(120deg, #071426 0%, #0b5ed7 35%, #13a7ff 50%, #94a3b8 66%, #071426 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      max-width: 750px;
+      margin-top: 20px;
+      font-size: 1.12rem;
+      color: #465468;
+    }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+    .btn {
+      min-height: 50px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 18px;
+      border-radius: 10px;
+      border: 1px solid rgba(7,20,38,.16);
+      font-weight: 950;
+      font-size: .86rem;
+      text-transform: uppercase;
+      letter-spacing: .045em;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 14px 32px rgba(7,20,38,.14);
+    }
+
+    .btn.blue { color: #fff; background: linear-gradient(135deg, #13a7ff 0%, #0b5ed7 48%, #06101f 100%); border-color: rgba(11,94,215,.4); }
+    .btn.silver { color: #071426; background: linear-gradient(135deg, #fff 0%, #d8e1ec 44%, #f9fcff 100%); }
+    .btn.black { color: #fff; background: linear-gradient(135deg, #172335, #05070b); border-color: rgba(5,7,11,.42); }
+
+    .store-tools {
+      display: grid;
+      grid-template-columns: 1.28fr repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 24px;
+      max-width: 780px;
+    }
+
+    .search-box, .tool {
+      min-height: 62px;
+      border-radius: 12px;
+      border: 1px solid rgba(7,20,38,.12);
+      background: rgba(255,255,255,.82);
+      box-shadow: 0 12px 28px rgba(7,20,38,.08);
+      display: flex;
+      align-items: center;
+      padding: 13px;
+      color: #526071;
+      font-weight: 900;
+    }
+
+    .tool { justify-content: center; text-align: center; color: #071426; text-transform: uppercase; font-size: .78rem; }
+
+    .hero-panel {
+      border-radius: 22px;
+      padding: 18px;
+      background:
+        linear-gradient(white, white) padding-box,
+        linear-gradient(135deg, rgba(11,94,215,.55), rgba(216,225,236,.95), rgba(19,167,255,.45)) border-box;
+      border: 1px solid transparent;
+      box-shadow: var(--shadow), var(--glow);
+    }
+
+    .hero-gallery {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .hero-tile {
+      height: 122px;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fff;
+      border: 1px solid rgba(7,20,38,.11);
+      box-shadow: 0 12px 28px rgba(7,20,38,.08);
+    }
+
+    .hero-tile:first-child { grid-column: span 2; height: 172px; }
+    .hero-tile img { width: 100%; height: 100%; object-fit: cover; }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+    .stat {
+      border-radius: 12px;
+      padding: 16px 14px;
+      background: linear-gradient(135deg, #ffffff, #e6edf5);
+      border: 1px solid rgba(7,20,38,.12);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.9);
+    }
+    .stat strong { display: block; font-size: 1.75rem; color: #071426; }
+    .stat span { color: #637184; font-size: .76rem; font-weight: 900; text-transform: uppercase; }
+
+    section { padding: 72px 0; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 28px; }
+    .section-head h2 { font-size: clamp(2rem, 4vw, 4.1rem); max-width: 790px; text-transform: uppercase; color: #071426; }
+    .section-head p { max-width: 480px; }
+
+    .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    .product-card {
+      display: block;
+      overflow: hidden;
+      border-radius: var(--radius);
+      background:
+        linear-gradient(#fff, #fff) padding-box,
+        linear-gradient(135deg, rgba(11,94,215,.25), rgba(216,225,236,.9), rgba(7,20,38,.12)) border-box;
+      border: 1px solid transparent;
+      box-shadow: 0 20px 42px rgba(7,20,38,.1);
+    }
+    .thumb { height: 180px; overflow: hidden; background: #eef3f8; }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.02); }
+    .product-card .body { padding: 18px; }
+    .product-card h3 { font-size: 1.16rem; color: #071426; text-transform: uppercase; }
+    .product-card p { margin-top: 8px; font-size: .94rem; }
+
+    .category-cloud { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+    .category-cloud a {
+      padding: 10px 13px;
+      border-radius: 999px;
+      border: 1px solid rgba(7,20,38,.12);
+      background: linear-gradient(135deg, #ffffff, #dce5ef);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.9);
+      color: #132236;
+      font-size: .83rem;
+      font-weight: 950;
+      text-transform: uppercase;
+    }
+
+    .blue-band {
+      color: #fff;
+      background:
+        radial-gradient(circle at 78% 12%, rgba(19,167,255,.3), transparent 28rem),
+        linear-gradient(135deg, #071426, #0b5ed7 70%, #06101f);
+      border-top: 1px solid rgba(255,255,255,.2);
+      border-bottom: 1px solid rgba(255,255,255,.18);
+    }
+    .blue-band h2, .blue-band h3 { color: #fff; }
+    .blue-band p { color: rgba(255,255,255,.76); }
+    .industry-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .industry {
+      min-height: 158px;
+      padding: 22px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.18);
+      background: linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.045));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.16);
+    }
+    .industry h3 { font-size: 1.35rem; }
+    .industry p { margin-top: 10px; }
+
+    .feature-row { display: grid; grid-template-columns: .92fr 1fr; gap: 26px; align-items: stretch; }
+    .feature-photo, .feature-copy {
+      border-radius: 18px;
+      overflow: hidden;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+    .feature-photo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 10px;
+    }
+
+    .feature-photo img {
+      width: 100%;
+      height: 205px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 1px solid rgba(7,20,38,.1);
+    }
+    .feature-copy { padding: 32px; }
+    .feature-copy h2 { font-size: clamp(2rem, 4vw, 4rem); color: #071426; text-transform: uppercase; }
+    .feature-copy p { margin-top: 16px; }
+    .checks { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 22px; }
+    .check {
+      padding: 14px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #f9fcff, #dfe8f2);
+      border: 1px solid rgba(7,20,38,.12);
+      color: #071426;
+      font-weight: 950;
+    }
+
+    .metro-strip { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+    .metro-strip a {
+      border-radius: 10px;
+      padding: 13px 10px;
+      text-align: center;
+      font-weight: 950;
+      font-size: .86rem;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #fff, #d7e1ec);
+      border: 1px solid rgba(7,20,38,.14);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.9);
+    }
+    .metro-strip a:hover { color: #fff; background: linear-gradient(135deg, #13a7ff, #0b5ed7 54%, #071426); }
+
+    .quote {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 82% 20%, rgba(19,167,255,.22), transparent 26rem),
+        linear-gradient(135deg, #ffffff, #eef5fc 58%, #d9e4ef);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .quote .wrap { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 24px; }
+    .quote h2 { font-size: clamp(2rem, 4vw, 4.2rem); color: #071426; text-transform: uppercase; }
+    .quote p { margin-top: 12px; max-width: 740px; }
+
+    footer {
+      background: linear-gradient(135deg, #05070b, #071426);
+      color: #fff;
+      padding: 42px 0;
+      border-top: 1px solid rgba(255,255,255,.16);
+    }
+    footer .wrap { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; }
+    footer h3 { margin: 0 0 10px; }
+    footer p { color: rgba(255,255,255,.68); }
+
+    @media (max-width: 980px) {
+      .mobile-actions { display: grid; }
+      .nav { top: 64px; }
+      .hero-grid, .feature-row, .quote .wrap, footer .wrap { grid-template-columns: 1fr; }
+      .product-grid { grid-template-columns: repeat(2, 1fr); }
+      .industry-grid { grid-template-columns: repeat(2, 1fr); }
+      .metro-strip { grid-template-columns: repeat(3, 1fr); }
+      .menu {
+        display: none;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: calc(100% + 8px);
+        padding: 12px;
+        border-radius: 14px;
+        border: 1px solid rgba(255,255,255,.2);
+        background: rgba(5,7,11,.96);
+        box-shadow: 0 26px 60px rgba(0,0,0,.3);
+      }
+      .menu.open { display: grid; grid-template-columns: 1fr; }
+      .menu a { color: #fff; background: linear-gradient(135deg, #102b52, #06101f); border-color: rgba(255,255,255,.14); }
+      .hamburger { display: flex; }
+    }
+
+    @media (max-width: 580px) {
+      .mobile-actions { top: 0; }
+      .top-strip { display: none; }
+      .nav { top: 64px; }
+      .brand { min-width: 0; }
+      .brand strong { font-size: 1.04rem; }
+      .brand span { font-size: .6rem; }
+      .mark { width: 48px; height: 48px; }
+      .hero-grid { padding: 44px 0 56px; }
+      h1 { font-size: 2.8rem; }
+      .store-tools { grid-template-columns: 1fr 1fr; }
+      .search-box { grid-column: 1 / -1; }
+      .hero-tile { height: 112px; }
+      .hero-tile:first-child { height: 148px; }
+      .product-grid, .industry-grid, .checks, .metro-strip { grid-template-columns: 1fr; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 12px; }
+      section { padding: 54px 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="mobile-actions">
+    <a href="#quote">Get Quote</a>
+    <a href="/products/">Products</a>
+    <a href="/metros/">Metro Pages</a>
+  </div>
+
+  <div class="top-strip">
+    <div class="wrap">
+      <div>Nationwide online sign and print ordering</div>
+      <div>EZ Sign Store, backed by DeZant Signs experience</div>
+    </div>
+  </div>
+
+  <nav class="nav" aria-label="Main navigation">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <div class="mark">EZ</div>
+        <div><strong>EZ Sign Store</strong><span>National Sign Buying Guide</span></div>
+      </a>
+      <div class="menu" id="main-menu">
+        <a href="/products/">Products</a>
+        <a href="#industries">Industries</a>
+        <a href="/metros/">Metro Pages</a>
+        <a href="#resources">Resources</a>
+        <a href="#quote">Quote</a>
+      </div>
+      <button class="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="main-menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow">Banners, yard signs, postcards, job site signs, door hangers, magnets, and displays</div>
+        <h1><span class="chrome-text">EZ ordering</span> for everyday sign and print products.</h1>
+        <p>EZ Sign Store makes it easier to order everyday signs and printed marketing products online. Browse product guides, compare options, prepare artwork, request pricing, and get help choosing the right sign before you order.</p>
+        <div class="actions">
+          <a class="btn blue" href="#quote">Request Pricing</a>
+          <a class="btn silver" href="/products/">Shop Product Types</a>
+          <a class="btn black" href="/metros/">Browse Metro Pages</a>
+        </div>
+        <div class="store-tools">
+          <div class="search-box">Search products: banners, yard signs, door hangers...</div>
+          <a class="tool" href="#quote">Upload Art</a>
+          <a class="tool" href="#quote">Get Design Help</a>
+          <a class="tool" href="/products/">Popular Items</a>
+        </div>
+      </div>
+      <div class="hero-panel">
+        <div class="hero-gallery" aria-label="EZ Sign Store product examples">
+          ${heroImages.map(([label, src]) => `<div class="hero-tile"><img src="${src}" alt="${label} from EZ Sign Store"></div>`).join("\n          ")}
+        </div>
+        <div class="stats">
+          <div class="stat"><strong>108</strong><span>metro pages</span></div>
+          <div class="stat"><strong>8+</strong><span>featured products</span></div>
+          <div class="stat"><strong>48</strong><span>state coverage</span></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section id="products">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Shop common signs and print products.</h2>
+        <p>Start with the products customers order most: banners, yard signs, job site signs, postcards, door hangers, vehicle magnets, and portable displays.</p>
+      </div>
+      <div class="product-grid">
+        ${products.map(([name, slug, copy, src]) => `<a class="product-card" href="/products/${slug}/"><div class="thumb"><img src="${src}" alt="${name} from EZ Sign Store"></div><div class="body"><h3>${name}</h3><p>${copy}</p></div></a>`).join("\n        ")}
+      </div>
+      <div class="category-cloud" aria-label="Additional EZ Sign Store product categories">
+        ${categoryCloud.map(([item, slug]) => `<a href="/products/${slug}/">${item}</a>`).join("")}
+      </div>
+    </div>
+  </section>
+
+  <section class="blue-band" id="industries">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Shop by business type and project need.</h2>
+        <p>Find sign and print ideas for contractors, realtors, schools, events, restaurants, stores, property managers, and local service businesses.</p>
+      </div>
+      <div class="industry-grid">
+        <div class="industry"><h3>Contractors</h3><p>Yard signs, truck magnets, fence banners, job site safety signs, permit boards, and project branding.</p></div>
+        <div class="industry"><h3>Realtors</h3><p>For sale signs, open house signs, riders, directional signs, door hangers, postcards, and agent marketing.</p></div>
+        <div class="industry"><h3>Retail Stores</h3><p>Sale signs, window decals, counter displays, A-frame signs, posters, banners, and seasonal promotions.</p></div>
+        <div class="industry"><h3>Restaurants</h3><p>Menu inserts, hours decals, grand opening banners, door hangers, event signs, and local promo prints.</p></div>
+        <div class="industry"><h3>Schools & Teams</h3><p>Graduation signs, sponsor banners, event posters, directional signs, spirit signs, and fundraiser prints.</p></div>
+        <div class="industry"><h3>Events</h3><p>Retractable banners, table displays, sponsor signage, parking signs, directional signs, and branded handouts.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="resources">
+    <div class="wrap feature-row">
+      <div class="feature-photo" aria-label="EZ Sign Store product category visuals">
+        <img src="${categoryImages.postcards}" alt="Custom postcards from EZ Sign Store">
+        <img src="${categoryImages.doorHangers}" alt="Printed door hangers from EZ Sign Store">
+        <img src="${categoryImages.vehicleMagnets}" alt="Vehicle magnets from EZ Sign Store">
+        <img src="${categoryImages.tabletopBanners}" alt="Tabletop banner displays from EZ Sign Store">
+      </div>
+      <div class="feature-copy">
+        <h2>Easy store experience, real sign-shop knowledge.</h2>
+        <p>EZ Sign Store gives customers a simple online way to choose products, upload artwork, request pricing, browse design options, and get help before production. DeZant Signs brings real sign-shop experience behind the ordering guidance.</p>
+        <div class="checks">
+          <div class="check">Upload artwork paths</div>
+          <div class="check">Request pricing CTAs</div>
+          <div class="check">Product buying guides</div>
+          <div class="check">Artwork prep content</div>
+          <div class="check">City sign guides</div>
+          <div class="check">Order-ready categories</div>
+        </div>
+        <div class="actions">
+          <a class="btn blue" href="/metros/">Open Metro Directory</a>
+          <a class="btn silver" href="#quote">Request Pricing</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Order signs for businesses across major U.S. markets.</h2>
+        <p>Browse sign-buying guides for major metro areas, then choose the product, artwork path, and quote option that fits your project.</p>
+      </div>
+      <div class="metro-strip">
+        <a href="/metros/new-york-city/">New York</a>
+        <a href="/metros/los-angeles/">Los Angeles</a>
+        <a href="/metros/chicago/">Chicago</a>
+        <a href="/metros/dallas-fort-worth/">Dallas</a>
+        <a href="/metros/miami-fort-lauderdale/">Miami</a>
+        <a href="/metros/boston/">Boston</a>
+        <a href="/metros/atlanta/">Atlanta</a>
+        <a href="/metros/phoenix/">Phoenix</a>
+        <a href="/metros/seattle/">Seattle</a>
+        <a href="/metros/denver/">Denver</a>
+        <a href="/metros/newark-jersey-city/">New Jersey</a>
+        <a href="/metros/">View All</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="quote" id="quote">
+    <div class="wrap">
+      <div>
+        <h2>Ready to price a sign or print job?</h2>
+        <p>Start with the product you need, then upload artwork, upload later, browse design options, request pricing, or ask for design help.</p>
+      </div>
+      <div class="actions">
+        <a class="btn silver" href="#">Upload Artwork</a>
+        <a class="btn blue" href="#">Request Pricing</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div><h3>EZ Sign Store</h3><p>A clean national sign and print buying resource for banners, decals, yard signs, vehicle magnets, postcards, door hangers, displays, and custom printed products.</p></div>
+      <div><h3>Backed By DeZant Signs</h3><p>DeZant Signs provides real sign-shop credibility and production knowledge behind the buying guidance.</p></div>
+      <div><h3>Product Help</h3><p>Browse product guides, artwork tips, material options, business use cases, and city sign-ordering resources.</p></div>
+    </div>
+  </footer>
+
+  <script>
+    const button = document.querySelector(".hamburger");
+    const menu = document.querySelector("#main-menu");
+    if (button && menu) {
+      button.addEventListener("click", () => {
+        const isOpen = menu.classList.toggle("open");
+        button.setAttribute("aria-expanded", String(isOpen));
+      });
+      menu.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          menu.classList.remove("open");
+          button.setAttribute("aria-expanded", "false");
+        });
+      });
+    }
+  </script>
+</body>
+</html>`;
+
+writeFileSync("dist/index.html", html);
+console.log("Generated clean white metallic homepage.");
